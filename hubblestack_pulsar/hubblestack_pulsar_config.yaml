@@ -33,6 +33,7 @@
     - /etc/cas/timestamp
     - /etc/resolv.conf.tmp
     - /etc/pve/nodes
+    - /etc/pve/priv/lock
     - /etc/pki/nssdb/key4.db-journal
     - /etc/pki/nssdb/cert9.db-journal
     - /etc/salt/gpgkeys/random_seed

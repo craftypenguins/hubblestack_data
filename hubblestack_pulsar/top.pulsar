@@ -1,3 +1,7 @@
 pulsar:
   '*':
-    - hubblestack_pulsar_config
+    - default
+    {% set roles = salt['grains.get']('roles',[]) -%}
+    {% for role in roles -%}
+    - {{ role }}.hubblestack_pulsar_config
+    {% endfor -%}

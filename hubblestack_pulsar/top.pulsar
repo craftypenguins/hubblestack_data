@@ -1,7 +1,13 @@
 pulsar:
   '*':
+<<<<<<< HEAD
+    - hubblestack_pulsar_config
+  'P@roles:(apache2)':
+    - apache2.apache2
+=======
     - default
     {% set roles = salt['grains.get']('roles',[]) -%}
     {% for role in roles -%}
     - {{ role }}.hubblestack_pulsar_config
     {% endfor -%}
+>>>>>>> 898e4281e899c57a297fd51ba45b8b383137eee6

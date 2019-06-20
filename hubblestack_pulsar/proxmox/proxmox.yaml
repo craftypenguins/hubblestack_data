@@ -1,6 +1,7 @@
 /etc:
   exclude:
     - /etc/pve/nodes
+    - /etc/pve/priv/lock
 return: splunk_pulsar_return
 checksum: sha256
 stats: True

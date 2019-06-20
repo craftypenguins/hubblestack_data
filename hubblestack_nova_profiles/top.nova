@@ -1,10 +1,6 @@
 # Default top.nova
 
 nova:
-#  'G@osfinger:Ubuntu-16.04':
-#    - cis.ubuntu-1604-level-1-scored-v1-1-0
-#  'G@osfinger:Ubuntu-18.04':
-#    - cis.ubuntu-1804-level-1-scored-v1-0-0
   '*':
     - healthchecks.default
   'P@checks:(default)':

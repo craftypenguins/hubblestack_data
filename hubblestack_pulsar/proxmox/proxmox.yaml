@@ -1,4 +1,6 @@
-/bin: { recurse: True, auto_add: True }
+/etc:
+  exclude:
+    - /etc/pve/nodes
 return: splunk_pulsar_return
 checksum: sha256
 stats: True

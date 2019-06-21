@@ -2,6 +2,8 @@
   exclude:
     - /etc/pve/nodes
     - /etc/pve/priv/lock
+    - \/etc\/apt\/apt.conf.d\/7\dpve.*:
+        regex: True
 return: splunk_pulsar_return
 checksum: sha256
 stats: True

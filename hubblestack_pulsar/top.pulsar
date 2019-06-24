@@ -1,6 +1,7 @@
 pulsar:
   '*':
-    - hubblestack_pulsar_config
+    - default
+    - custom
   'P@roles:(apache2)':
     - apache2.apache2
   'P@roles:(proxmox)':

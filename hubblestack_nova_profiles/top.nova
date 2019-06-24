@@ -2,6 +2,6 @@
 
 nova:
   '*':
-    - healthchecks.default
+    - custom
   'P@checks:(default)':
     - healthchecks.default

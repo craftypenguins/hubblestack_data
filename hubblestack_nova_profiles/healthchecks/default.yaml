@@ -166,22 +166,6 @@ grep:
             tag: CIS-4.2.1.3
             allow_more_strict: true
       description: Ensure rsyslog default file permissions configured
-    lockout_account:
-      data:
-        '*':
-        - /etc/pam.d/system-auth:
-            pattern: '"^auth\s+required\s+pam_faillock\.so.*"'
-            match_output: deny=5
-            grep_args:
-              - '-E'
-            tag: CIS-5.3.2
-        - /etc/pam.d/password-auth:
-            pattern: '"^auth\s+required\s+pam_faillock\.so.*"'
-            match_output: deny=5
-            grep_args:
-              - '-E'
-            tag: CIS-5.3.2
-      description: Ensure lockout for failed password attempts is configured
     ssh_version_2:
       data:
         '*':
@@ -209,15 +193,6 @@ grep:
             match_output_regex: True
             tag: CIS-5.2.6
       description: Ensure SSH X11 forwarding is disabled
-    ssh_auth_retries:
-      data:
-        '*':
-        - /etc/ssh/sshd_config:
-            pattern: ^MaxAuthTries
-            match_output_regex: True
-            match_output: "^MaxAuthTries +[1-4]$"
-            tag: CIS-5.2.7
-      description: Ensure SSH MaxAuthTries is set to 4 or less
     ssh_ignore_rhosts:
       data:
         '*':
@@ -272,15 +247,6 @@ grep:
             match_output_regex: True
             tag: CIS-5.2.17
       description: Ensure SSH LoginGraceTime is set to one minute or less
-    ssh_limit_access:
-      data:
-        '*':
-        - /etc/ssh/sshd_config:
-            pattern: '^AllowUsers|^AllowGroups|^DenyUsers|^DenyGroups'
-            grep_args:
-              - '-E'
-            tag: CIS-5.2.18
-      description:  Ensure SSH access is limited
     password_hash:
       data:
         '*':
@@ -302,22 +268,6 @@ grep:
             pattern: wheel
             tag: CIS-5.6
       description: Ensure access to the su command is restricted
-    default_umask:
-      data:
-        '*':
-        - /etc/bash.bashrc:
-            pattern: umask
-            match_pattern: '0[2367]7'
-            grep_args:
-              - '-E'
-            tag: CIS-5.4.4
-        - /etc/profile.d/cis.sh:
-            pattern: umask
-            match_pattern: '0[2367]7'
-            grep_args:
-              - '-E'
-            tag: CIS-5.4.4
-      description: Ensure default user umask is 027 or more restrictive
   blacklist:
     disable_mount_cramfs:
       data:
@@ -428,14 +378,26 @@ grep:
               - '-r'
             tag: CIS-2.1.9
       description: Ensure tftp server is not enabled
+    configure_fail2ban:
+      data:
+        '*':
+        - /etc/fail2ban/jail.conf:
+            pattern: '^\[sshd\]$'
+            tag: CP-Healthcheck
+      description: Ensure SSH fail2ban jail is configured
 
 service:
   whitelist:
-    syslog-ng_running:
+    syslog_running:
       data:
         '*':
-        - syslog-ng: CIS-4.2.2.1
-      description: Ensure syslog-ng service is enabled
+        - syslog: CIS-4.2.2.1
+      description: Ensure syslog service is enabled
+    fail2ban_running:
+      data:
+        '*':
+        - fail2ban: CP-Healthcheck
+      description: Ensure fail2ban service is enabled
     cron:
       data:
         '*':
@@ -457,13 +419,6 @@ sysctl:
           match_output: '2'
           tag: CIS-1.5.3
     description: Ensure address space layout randomization (ASLR) is enabled
-  disable_ip4_ip_forward:
-    data:
-      '*':
-      - net.ipv4.ip_forward:
-          match_output: '0'
-          tag: CIS-3.1.1
-    description: Ensure IP forwarding is disabled
   disable_packet_redirect:
     data:
       '*':
@@ -612,11 +567,6 @@ pkg:
         '*':
         - ntp: CIS-2.2.1.2
       description: Configure Network Time Protocol (NTP)
-    aide:
-      data:
-        '*':
-        - aide: CIS-1.3.1
-      description: Ensure AIDE is installed
     tcpd:
       data:
         '*':
@@ -736,40 +686,6 @@ stat:
           allow_more_strict: true
           tag: CIS-5.1.7
     description:  Ensure permissions on /etc/cron.d are configured
-  at_cron_allow:
-    data:
-      '*':
-      - /etc/cron.deny:
-          gid: null
-          group: null
-          mode: null
-          tag: CIS-5.1.8
-          uid: null
-          user: null
-      - /etc/at.deny:
-          gid: null
-          group: null
-          mode: null
-          tag: CIS-5.1.8
-          uid: null
-          user: null
-      - /etc/cron.allow:
-          gid: 0
-          group: root
-          mode: 600
-          allow_more_strict: true
-          tag: CIS-5.1.8
-          uid: 0
-          user: root
-      - /etc/at.allow:
-          gid: 0
-          group: root
-          mode: 600
-          allow_more_strict: true
-          tag: CIS-5.1.8
-          uid: 0
-          user: root
-    description: Ensure at/cron is restricted to authorized users
   sshd_config:
     data:
       '*':
@@ -918,19 +834,12 @@ misc:
         args:
           - rsyslog, syslog-ng
     description: Ensure rsyslog or syslog-ng is installed
-#  check_log_files_permission:
-#    data:
-#      '*':
-#       tag: CIS-4.2.4
-#       function: check_directory_files_permission
-#       args:
-#        - /var/log
-#        - 740
-#    description: Ensure permissions on all logfiles are configured
   system_account_non_login:
     data:
       '*':
         tag: CIS-5.4.2
+        args:
+        - '/usr/sbin/nologin'
         function: system_account_non_login
     description: Ensure system accounts are non-login
   default_group_for_root_account:

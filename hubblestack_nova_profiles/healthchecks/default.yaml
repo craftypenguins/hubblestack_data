@@ -1,12 +1,5 @@
 grep:
   whitelist:
-    single_user_mode_check:
-      data:
-        '*':
-        - /etc/shadow:
-            pattern: '^root:[*\!]:'
-            tag: CIS-1.4.3
-      description: Ensure authentication required for single user mode
     mounts_home_partition_nodev:
       data:
         '*':
@@ -94,15 +87,6 @@ grep:
             pattern: /dev/shm
             tag: CIS-1.1.17
       description: Ensure noexec option set on /dev/shm partition
-    aide_filesystem_scans:
-      data:
-        '*':
-        - /etc/cron.d:
-            pattern: aide
-            grep_args:
-              - '-r'
-            tag: CIS-1.3.2
-      description: Ensure filesystem integrity is regularly checked
     boot_loader_passwd:
       data:
         '*':
@@ -269,6 +253,13 @@ grep:
             tag: CIS-5.6
       description: Ensure access to the su command is restricted
   blacklist:
+    single_user_mode_check:
+      data:
+        '*':
+        - /etc/shadow:
+            pattern: '^root:[*\!]:'
+            tag: CIS-1.4.3
+      description: Ensure authentication required for single user mode
     disable_mount_cramfs:
       data:
         '*':
@@ -419,13 +410,6 @@ sysctl:
           match_output: '2'
           tag: CIS-1.5.3
     description: Ensure address space layout randomization (ASLR) is enabled
-  disable_packet_redirect:
-    data:
-      '*':
-      - net.ipv4.conf.all.send_redirects:
-          match_output: '0'
-          tag: CIS-3.1.2
-    description: Ensure packet redirect sending is disabled
   disable_source_routed_packets:
     data:
       '*':

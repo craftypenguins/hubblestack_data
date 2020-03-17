@@ -1,7 +1,9 @@
 /etc:
   exclude:
-    - /etc/pve/nodes
-    - /etc/pve/priv/lock
+    - /etc/pve/nodes/.*$:
+        regex: True
+    - /etc/pve/priv/lock/.*$:
+        regex: True
     - \/etc\/apt\/apt.conf.d\/7\dpve.*:
         regex: True
 return: splunk_pulsar_return

@@ -47,8 +47,8 @@
     - \/etc\/gshadow\.\d*$:
         regex: True
   recurse: True
+  auto_add: True
 return: splunk_pulsar_return
-auto_add: True
 checksum: sha256
 stats: True
 batch: True
